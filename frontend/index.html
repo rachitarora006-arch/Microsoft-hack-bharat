@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Intelligence — Live Dashboard</title>
+    <meta name="description" content="Real-time Stock & Crypto Market Intelligence System with AI-powered insights">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+    <!-- ═══════════ HEADER / NAV ═══════════ -->
+    <header class="app-header" id="appHeader">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">MarketIntel</span>
+                <span class="logo-badge">LIVE</span>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="asset-selector" id="assetSelector">
+                <button class="asset-btn active" data-symbol="BTC">BTC</button>
+                <button class="asset-btn" data-symbol="ETH">ETH</button>
+                <button class="asset-btn" data-symbol="SOL">SOL</button>
+                <button class="asset-btn" data-symbol="NIFTY">NIFTY</button>
+                <button class="asset-btn" data-symbol="SENSEX">SENSEX</button>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot disconnected"></span>
+                <span class="status-text">Connecting...</span>
+            </div>
+            <div class="header-stats">
+                <span class="stat-item" id="tickCount" title="Ticks processed">⚡ 0</span>
+                <span class="stat-item" id="wsClients" title="WS clients">🔌 0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══════════ TOAST CONTAINER ═══════════ -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ═══════════ MAIN DASHBOARD ═══════════ -->
+    <main class="dashboard">
+
+        <!-- ─── TOP ROW: PRICE CARDS ─── -->
+        <section class="price-cards-row" id="priceCardsRow">
+            <div class="price-card" data-symbol="BTC" id="card-BTC">
+                <div class="card-top">
+                    <span class="card-symbol">BTC</span>
+                    <span class="regime-badge" id="regime-BTC">—</span>
+                </div>
+                <div class="card-price" id="price-BTC">$0.00</div>
+                <div class="card-change" id="change-BTC">
+                    <span class="change-value">0.00%</span>
+                </div>
+                <div class="card-sparkline"><canvas id="spark-BTC" width="120" height="32"></canvas></div>
+                <div class="card-bottom">
+                    <span class="card-vol" id="vol-BTC">Vol: —</span>
+                    <span class="card-rsi" id="rsi-BTC">RSI: —</span>
+                </div>
+            </div>
+            <div class="price-card" data-symbol="ETH" id="card-ETH">
+                <div class="card-top">
+                    <span class="card-symbol">ETH</span>
+                    <span class="regime-badge" id="regime-ETH">—</span>
+                </div>
+                <div class="card-price" id="price-ETH">$0.00</div>
+                <div class="card-change" id="change-ETH">
+                    <span class="change-value">0.00%</span>
+                </div>
+                <div class="card-sparkline"><canvas id="spark-ETH" width="120" height="32"></canvas></div>
+                <div class="card-bottom">
+                    <span class="card-vol" id="vol-ETH">Vol: —</span>
+                    <span class="card-rsi" id="rsi-ETH">RSI: —</span>
+                </div>
+            </div>
+            <div class="price-card" data-symbol="SOL" id="card-SOL">
+                <div class="card-top">
+                    <span class="card-symbol">SOL</span>
+                    <span class="regime-badge" id="regime-SOL">—</span>
+                </div>
+                <div class="card-price" id="price-SOL">$0.00</div>
+                <div class="card-change" id="change-SOL">
+                    <span class="change-value">0.00%</span>
+                </div>
+                <div class="card-sparkline"><canvas id="spark-SOL" width="120" height="32"></canvas></div>
+                <div class="card-bottom">
+                    <span class="card-vol" id="vol-SOL">Vol: —</span>
+                    <span class="card-rsi" id="rsi-SOL">RSI: —</span>
+                </div>
+            </div>
+            <div class="price-card" data-symbol="NIFTY" id="card-NIFTY">
+                <div class="card-top">
+                    <span class="card-symbol">NIFTY</span>
+                    <span class="regime-badge" id="regime-NIFTY">—</span>
+                </div>
+                <div class="card-price" id="price-NIFTY">$0.00</div>
+                <div class="card-change" id="change-NIFTY">
+                    <span class="change-value">0.00%</span>
+                </div>
+                <div class="card-sparkline"><canvas id="spark-NIFTY" width="120" height="32"></canvas></div>
+                <div class="card-bottom">
+                    <span class="card-vol" id="vol-NIFTY">Vol: —</span>
+                    <span class="card-rsi" id="rsi-NIFTY">RSI: —</span>
+                </div>
+            </div>
+            <div class="price-card" data-symbol="SENSEX" id="card-SENSEX">
+                <div class="card-top">
+                    <span class="card-symbol">SENSEX</span>
+                    <span class="regime-badge" id="regime-SENSEX">—</span>
+                </div>
+                <div class="card-price" id="price-SENSEX">$0.00</div>
+                <div class="card-change" id="change-SENSEX">
+                    <span class="change-value">0.00%</span>
+                </div>
+                <div class="card-sparkline"><canvas id="spark-SENSEX" width="120" height="32"></canvas></div>
+                <div class="card-bottom">
+                    <span class="card-vol" id="vol-SENSEX">Vol: —</span>
+                    <span class="card-rsi" id="rsi-SENSEX">RSI: —</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ─── MAIN GRID ─── -->
+        <div class="dashboard-grid">
+
+            <!-- ═══ INDICATORS PANEL ═══ -->
+            <section class="panel panel-indicators" id="indicatorsPanel">
+                <div class="panel-header">
+                    <h2>📊 Technical Indicators</h2>
+                    <span class="panel-asset" id="indAsset">BTC</span>
+                </div>
+                <div class="ind-grid" id="indicatorsGrid">
+                    <div class="ind-card">
+                        <div class="ind-label">SMA-20</div>
+                        <div class="ind-value" id="ind-sma_short">—</div>
+                        <div class="ind-arrow" id="arrow-sma_short"></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">SMA-50</div>
+                        <div class="ind-value" id="ind-sma_long">—</div>
+                        <div class="ind-arrow" id="arrow-sma_long"></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">EMA-12</div>
+                        <div class="ind-value" id="ind-ema12">—</div>
+                        <div class="ind-arrow" id="arrow-ema12"></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">EMA-26</div>
+                        <div class="ind-value" id="ind-ema26">—</div>
+                        <div class="ind-arrow" id="arrow-ema26"></div>
+                    </div>
+                    <div class="ind-card ind-highlight">
+                        <div class="ind-label">RSI (14)</div>
+                        <div class="ind-value" id="ind-rsi">—</div>
+                        <div class="ind-bar"><div class="ind-bar-fill" id="rsiBar"></div></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">MACD</div>
+                        <div class="ind-value" id="ind-macd_line">—</div>
+                        <div class="ind-arrow" id="arrow-macd_line"></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">Signal</div>
+                        <div class="ind-value" id="ind-macd_signal">—</div>
+                        <div class="ind-arrow" id="arrow-macd_signal"></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">Histogram</div>
+                        <div class="ind-value" id="ind-macd_histogram">—</div>
+                        <div class="ind-arrow" id="arrow-macd_histogram"></div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">BB Upper</div>
+                        <div class="ind-value" id="ind-bb_upper">—</div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">BB Middle</div>
+                        <div class="ind-value" id="ind-bb_middle">—</div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">BB Lower</div>
+                        <div class="ind-value" id="ind-bb_lower">—</div>
+                    </div>
+                    <div class="ind-card">
+                        <div class="ind-label">Volatility</div>
+                        <div class="ind-value" id="ind-rolling_vol">—</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ ALERTS PANEL ═══ -->
+            <section class="panel panel-alerts" id="alertsPanel">
+                <div class="panel-header">
+                    <h2>🚨 Live Alerts</h2>
+                    <span class="alert-count-badge" id="alertCountBadge">0</span>
+                </div>
+                <div class="alerts-feed" id="alertsFeed">
+                    <div class="alert-empty">Monitoring for anomalies...</div>
+                </div>
+            </section>
+
+            <!-- ═══ PORTFOLIO PANEL ═══ -->
+            <section class="panel panel-portfolio" id="portfolioPanel">
+                <div class="panel-header">
+                    <h2>💼 Portfolio</h2>
+                </div>
+                <div class="portfolio-summary" id="portfolioSummary">
+                    <div class="port-metric">
+                        <span class="port-label">Total Value</span>
+                        <span class="port-value" id="portValue">$0</span>
+                    </div>
+                    <div class="port-metric">
+                        <span class="port-label">Total PnL</span>
+                        <span class="port-value" id="portPnl">$0</span>
+                    </div>
+                    <div class="port-metric">
+                        <span class="port-label">PnL %</span>
+                        <span class="port-value" id="portPnlPct">0%</span>
+                    </div>
+                    <div class="port-metric">
+                        <span class="port-label">VaR (95%)</span>
+                        <span class="port-value" id="portVar">$0</span>
+                    </div>
+                </div>
+                <div class="risk-gauge-container">
+                    <div class="risk-gauge-label">Risk Score</div>
+                    <div class="risk-gauge" id="riskGauge">
+                        <svg viewBox="0 0 200 120" class="gauge-svg">
+                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--surface-3)" stroke-width="12" stroke-linecap="round"/>
+                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" id="gaugeArc" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+                            <defs>
+                                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stop-color="#10b981"/>
+                                    <stop offset="50%" stop-color="#f59e0b"/>
+                                    <stop offset="100%" stop-color="#ef4444"/>
+                                </linearGradient>
+                            </defs>
+                            <text x="100" y="95" text-anchor="middle" class="gauge-text" id="gaugeText">0</text>
+                        </svg>
+                    </div>
+                    <div class="drawdown-row">
+                        <span class="port-label">Max Drawdown</span>
+                        <span class="port-value" id="portDrawdown">0%</span>
+                    </div>
+                </div>
+                <div class="positions-table-wrap">
+                    <table class="positions-table" id="positionsTable">
+                        <thead>
+                            <tr><th>Asset</th><th>Qty</th><th>Price</th><th>PnL</th><th>Risk</th></tr>
+                        </thead>
+                        <tbody id="positionsBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- ═══ CORRELATION PANEL ═══ -->
+            <section class="panel panel-correlation" id="correlationPanel">
+                <div class="panel-header">
+                    <h2>🔗 Correlations</h2>
+                </div>
+                <div class="correlation-cards" id="correlationCards">
+                    <div class="corr-card">
+                        <div class="corr-pair">BTC — ETH</div>
+                        <div class="corr-value" id="corr-BTC-ETH">—</div>
+                        <div class="corr-bar"><div class="corr-bar-fill" id="corrBar-BTC-ETH"></div></div>
+                        <div class="corr-change" id="corrChange-BTC-ETH"></div>
+                    </div>
+                    <div class="corr-card">
+                        <div class="corr-pair">NIFTY — SENSEX</div>
+                        <div class="corr-value" id="corr-NIFTY-SENSEX">—</div>
+                        <div class="corr-bar"><div class="corr-bar-fill" id="corrBar-NIFTY-SENSEX"></div></div>
+                        <div class="corr-change" id="corrChange-NIFTY-SENSEX"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ NARRATOR PANEL ═══ -->
+            <section class="panel panel-narrator" id="narratorPanel">
+                <div class="panel-header">
+                    <h2>📝 Market Narrator</h2>
+                    <span class="narrator-time" id="narratorTime">—</span>
+                </div>
+                <div class="narrator-content" id="narratorContent">
+                    <div class="narrator-placeholder">Generating first market summary...</div>
+                </div>
+            </section>
+
+            <!-- ═══ AI CHAT PANEL ═══ -->
+            <section class="panel panel-chat" id="chatPanel">
+                <div class="panel-header">
+                    <h2>🤖 AI Assistant</h2>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-msg bot">
+                        <div class="chat-avatar">AI</div>
+                        <div class="chat-bubble">Hi! I can analyze markets, explain anomalies, and answer questions about your portfolio. Try asking: <em>"Why is BTC falling?"</em></div>
+                    </div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chatInput" placeholder="Ask about markets, portfolio, anomalies..." autocomplete="off">
+                    <button class="chat-send-btn" id="chatSendBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <span>Market Intelligence System v2.0</span>
+        <span>Streaming Engine + FastAPI + LLM</span>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

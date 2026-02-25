@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  market-intelligence:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: market-intelligence
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-1234efgh5678ijkl1234efgh5678ijkl1234efgh}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/status" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
