@@ -121,7 +121,7 @@ NARRATOR_INTERVAL_SECONDS = 300   # 5 minutes
 #  SERVER
 # ═══════════════════════════════════════════════════════════
 API_HOST = "0.0.0.0"
-API_PORT = 8000
+API_PORT = int(os.getenv("PORT", 8000))
 
 # ═══════════════════════════════════════════════════════════
 #  LOGGING
