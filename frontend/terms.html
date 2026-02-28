@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Intelligence — Terms of Service</title>
+    <meta name="description" content="Terms of Service and Data Disclaimers for the Market Intelligence System.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        .terms-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .terms-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .terms-header h1 {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .terms-header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .terms-content {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+        }
+
+        .terms-content h2 {
+            font-size: 1.5rem;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .terms-content h2:first-child {
+            margin-top: 0;
+        }
+
+        .terms-content p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-size: 1rem;
+        }
+
+        .terms-content ul {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+
+        .highlight-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--red);
+            padding: 16px 20px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 24px 0;
+        }
+
+        .highlight-box p {
+            color: #fca5a5;
+            margin-bottom: 0;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <!-- ═══════════ HEADER / NAV ═══════════ -->
+    <header class="app-header" id="appHeader">
+        <div class="header-left">
+            <a href="/" class="logo" style="text-decoration: none;">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">MarketIntel</span>
+            </a>
+        </div>
+        <div class="header-center">
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/dashboard" class="nav-link">Live Dashboard</a>
+                <a href="/docs-page" class="nav-link">Documentation</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <a href="/dashboard" class="asset-btn active" style="text-decoration: none;">Launch App</a>
+        </div>
+    </header>
+
+    <!-- ═══════════ MAIN CONTENT ═══════════ -->
+    <main class="terms-container">
+        <div class="terms-header">
+            <h1>Terms of Service</h1>
+            <p>Last Updated: February 2026</p>
+        </div>
+
+        <div class="terms-content">
+            <h2>1. Educational and Simulation Use Only</h2>
+            <div class="highlight-box">
+                <p><strong>IMPORTANT DISCLAIMER:</strong> This Market Intelligence System is a technology demonstration and simulation project. It does NOT provide real financial advice, real-time factual market data, or factual news.</p>
+            </div>
+            <p>All data streams, news articles, technical indicators, alerts, and AI-generated narratives surfaced within this application are entirely simulated for the purposes of demonstrating data streaming architecture, analytical pipelines, and LLM integrations. You agree not to base any real-world financial, trading, or investment decisions on any output from this system.</p>
+
+            <h2>2. No Warranty</h2>
+            <p>The system is provided "as is" and "as available" without any warranties of any kind, either express or implied, including, but not limited to, the implied warranties of merchantability, fitness for a particular purpose, or non-infringement. We make no warranty that the system will be secure, error-free, or continuously available.</p>
+
+            <h2>3. AI Generative Output</h2>
+            <p>The "Market Narrator" and "AI Assistant" features utilize large language models (LLMs) to generate text based on simulated inputs. You acknowledge that AI-generated output is prone to hallucinations, inaccuracies, and potentially illogical conclusions. You are solely responsible for verifying any claims made by the AI modules.</p>
+
+            <h2>4. Data Privacy and Local Storage</h2>
+            <p>By using this locally-hosted application, you understand that:</p>
+            <ul>
+                <li>Simulated data and document indices (vector databases) are stored locally on your machine.</li>
+                <li>When interacting with the AI Assistant or the Market Narrator, context data is transmitted to the configured external LLM provider API (e.g., OpenAI) based on your API key in `config.py`.</li>
+                <li>We do not collect, monitor, or harvest telemetry data from your local instance of this application.</li>
+            </ul>
+
+            <h2>5. Limitation of Liability</h2>
+            <p>In no event shall the developers, contributors, or copyright holders be liable for any claims, damages (including financial losses), or other liability, whether in an action of contract, tort, or otherwise, arising from, out of, or in connection with the software or the use or other dealings in the software.</p>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div>
+            <span>Market Intelligence System v2.0</span>
+            <span style="margin-left: 12px; color: var(--text-muted);">Built with FastAPI & WebSockets</span>
+        </div>
+        <div style="display: flex; gap: 16px;">
+            <a href="/docs-page" style="color: var(--text-muted); text-decoration: none;">Docs</a>
+            <a href="/terms" style="color: var(--text-muted); text-decoration: none;">Terms of Service</a>
+        </div>
+    </footer>
+</body>
+</html>

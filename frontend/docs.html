@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Intelligence — Documentation</title>
+    <meta name="description" content="Documentation and architecture flowcharts for the Market Intelligence System.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            fontFamily: 'Inter, sans-serif'
+        });
+    </script>
+    <style>
+        .docs-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        .docs-header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 24px;
+        }
+        .docs-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+        .docs-header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        .docs-section {
+            margin-bottom: 60px;
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+        .docs-section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .docs-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-size: 1.05rem;
+        }
+        .mermaid-wrapper {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 24px;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+        }
+        .mermaid {
+            background: transparent !important;
+        }
+        .code-block {
+            background: #111827;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            overflow-x: auto;
+            margin-bottom: 16px;
+            white-space: pre;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <header class="app-header" id="appHeader">
+        <div class="header-left">
+            <a href="/" class="logo" style="text-decoration: none;">
+                <span class="logo-icon">◆</span>
+                <span class="logo-text">MarketIntel</span>
+            </a>
+        </div>
+        <div class="header-center">
+            <nav class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/dashboard" class="nav-link">Live Dashboard</a>
+                <a href="/docs-page" class="nav-link active">Documentation</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <a href="/dashboard" class="asset-btn active" style="text-decoration: none;">Launch App</a>
+        </div>
+    </header>
+
+    <main class="docs-container">
+        <div class="docs-header">
+            <h1>System Architecture &amp; Documentation</h1>
+            <p>A deep dive into how the Market Intelligence System ingests data, processes analytics, and generates AI narratives in real-time.</p>
+        </div>
+
+        <section class="docs-section">
+            <h2>⚙️ System Overview &amp; Data Pipeline</h2>
+            <p>The core of the application is a high-performance Python streaming engine designed to process market ticks and news articles concurrently. The data flows through multiple stateful analytical modules before being broadcasted via WebSockets.</p>
+
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+flowchart TD
+    classDef source fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#fff
+    classDef processing fill:#0f766e,stroke:#2dd4bf,stroke-width:2px,color:#fff
+    classDef ai fill:#6d28d9,stroke:#c084fc,stroke-width:2px,color:#fff
+    classDef client fill:#b45309,stroke:#fbbf24,stroke-width:2px,color:#fff
+
+    MarketStream["Live Market Data Generator"]:::source
+    NewsStream["News Directory Watcher"]:::source
+    Engine["Streaming Engine"]
+
+    MarketStream --> Engine
+    NewsStream --> Engine
+
+    subgraph AP["Analytics Pipeline"]
+        Ind["Technical Indicators"]:::processing
+        Regime["Market Regime Detection"]:::processing
+        Anom["Anomaly Detection"]:::processing
+        Corr["Correlation Tracker"]:::processing
+        Port["Portfolio Risk Engine"]:::processing
+    end
+
+    Engine -->|Market Tick| Ind
+    Ind --> Regime
+    Ind --> Anom
+    Engine -->|Price Update| Corr
+    Engine -->|User Positions| Port
+
+    subgraph RM["RAG Module"]
+        DocStore[("FAISS Vector DB")]:::ai
+        Embedder["MiniLM Embedder"]:::ai
+    end
+
+    Engine -->|News Row| Embedder
+    Embedder --> DocStore
+
+    Agg["Shared Market State"]
+    Ind --> Agg
+    Regime --> Agg
+    Anom --> Agg
+    Corr --> Agg
+    Port --> Agg
+
+    WS(("WebSocket Server")):::client
+    Agg -->|Real-time Broadcast| WS
+
+    Narrator["Market Narrator GPT-4o"]:::ai
+    Agg -->|State Snapshot| Narrator
+    Narrator -->|Narrative| WS
+
+    Client["Live Dashboard UI"]:::client
+    WS -->|Full Duplex| Client
+    Client -->|Commands| WS
+</pre>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2>🧠 The Pathway Framework — AI Chat &amp; RAG</h2>
+            <p>The interactive AI Assistant on the dashboard utilizes Retrieval-Augmented Generation (RAG). When a user asks a question, the system queries the local vector database for relevant news context, combines it with the live mathematical state of the market, and prompts the LLM to provide a highly contextual and accurate answer.</p>
+
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+sequenceDiagram
+    participant User as Dashboard User
+    participant API as FastAPI Server
+    participant DB as FAISS Vector DB
+    participant State as Live Market State
+    participant LLM as OpenAI GPT-4o
+
+    User->>API: POST /api/ask
+    API->>DB: Embed Question and Search
+    DB-->>API: Top K Relevant Articles
+    API->>State: get_market_context
+    State-->>API: Prices, Regimes, Portfolio
+    Note over API,LLM: Assemble Unified Prompt
+    API->>LLM: System + News + State + Question
+    LLM-->>API: Context-Aware Answer
+    API-->>User: JSON Response with Sources
+</pre>
+            </div>
+        </section>
+
+        <section class="docs-section">
+            <h2>📂 Project File Architecture</h2>
+            <p>The modular Python backend ensures separation of concerns. Each module is a pure-function processor invoked by the streaming engine.</p>
+            <div class="code-block">
+├── main.py                 # Application orchestrator, WS handling, and FastAPI routes
+├── config.py               # Central configuration (API keys, tuning params, thresholds)
+├── streaming_engine.py     # Custom concurrency engine handling streams and callbacks
+├── ingestion.py            # Generates simulated ticks and reads news from CSV
+├── indicators.py           # Computes SMA, EMA, MACD, RSI, Bollinger Bands
+├── regime_detection.py     # Heuristic-based market state classification
+├── anomaly_detection.py    # Detects price spikes, volume surges, and flash crashes
+├── portfolio_engine.py     # Calculates PnL, Value at Risk (VaR), and Risk Scores
+├── correlation_engine.py   # Computes Pearson correlations between asset pairs
+├── rag_module.py           # Embeds news articles and runs local FAISS vector search
+├── ai_explanations.py      # Formats prompts and communicates with OpenAI APIs
+└── frontend/               # Standard web technologies (HTML, CSS, Vanilla JS)
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <div>
+            <span>Market Intelligence System v2.0</span>
+            <span style="margin-left: 12px; color: var(--text-muted);">Built with FastAPI &amp; WebSockets</span>
+        </div>
+        <div style="display: flex; gap: 16px;">
+            <a href="/docs-page" style="color: var(--text-muted); text-decoration: none;">Docs</a>
+            <a href="/terms" style="color: var(--text-muted); text-decoration: none;">Terms of Service</a>
+        </div>
+    </footer>
+</body>
+</html>

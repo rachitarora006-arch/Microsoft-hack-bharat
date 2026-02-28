@@ -3,321 +3,193 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Market Intelligence — Live Dashboard</title>
-    <meta name="description" content="Real-time Stock & Crypto Market Intelligence System with AI-powered insights">
+    <title>Market Intelligence — AI-Powered Insights</title>
+    <meta name="description" content="Next-generation Stock & Crypto Market Intelligence System. Real-time streaming, AI narratives, and advanced risk analytics.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/dashboard.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <style>
+        /* Homepage Specific Styles */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 24px;
+            min-height: calc(100vh - var(--header-h) - 60px);
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.1) 0%, transparent 60%);
+        }
+        
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            color: var(--accent-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            max-width: 900px;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #fff, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero h1 span {
+            color: var(--accent);
+            background: none;
+            -webkit-text-fill-color: var(--accent);
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: var(--radius-lg);
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.2s var(--ease);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: var(--surface-1);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            text-align: left;
+            transition: border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            display: inline-block;
+            background: var(--surface-2);
+            width: 64px;
+            height: 64px;
+            line-height: 64px;
+            text-align: center;
+            border-radius: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 900px) {
+            .hero h1 { font-size: 3rem; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
     <!-- ═══════════ HEADER / NAV ═══════════ -->
     <header class="app-header" id="appHeader">
         <div class="header-left">
-            <div class="logo">
+            <a href="/" class="logo" style="text-decoration: none;">
                 <span class="logo-icon">◆</span>
                 <span class="logo-text">MarketIntel</span>
-                <span class="logo-badge">LIVE</span>
-            </div>
+            </a>
         </div>
         <div class="header-center">
-            <div class="asset-selector" id="assetSelector">
-                <button class="asset-btn active" data-symbol="BTC">BTC</button>
-                <button class="asset-btn" data-symbol="ETH">ETH</button>
-                <button class="asset-btn" data-symbol="SOL">SOL</button>
-                <button class="asset-btn" data-symbol="NIFTY">NIFTY</button>
-                <button class="asset-btn" data-symbol="SENSEX">SENSEX</button>
-            </div>
+            <nav class="nav-links">
+                <a href="/" class="nav-link active">Home</a>
+                <a href="/dashboard" class="nav-link">Live Dashboard</a>
+                <a href="/docs-page" class="nav-link">Documentation</a>
+            </nav>
         </div>
         <div class="header-right">
-            <div class="connection-status" id="connectionStatus">
-                <span class="status-dot disconnected"></span>
-                <span class="status-text">Connecting...</span>
-            </div>
-            <div class="header-stats">
-                <span class="stat-item" id="tickCount" title="Ticks processed">⚡ 0</span>
-                <span class="stat-item" id="wsClients" title="WS clients">🔌 0</span>
-            </div>
+            <a href="/dashboard" class="asset-btn active" style="text-decoration: none;">Launch App</a>
         </div>
     </header>
 
-    <!-- ═══════════ TOAST CONTAINER ═══════════ -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- ═══════════ MAIN CONTENT ═══════════ -->
+    <main>
+        <section class="hero">
+            <div class="hero-badge">v2.0 Beta Live</div>
+            <h1>The Edge in <span>Market Intelligence</span></h1>
+            <p>Real-time streaming analytics, anomalous event detection, and generative AI narratives for the modern portfolio manager.</p>
+            <a href="/dashboard" class="btn-primary">Launch Live Dashboard</a>
 
-    <!-- ═══════════ MAIN DASHBOARD ═══════════ -->
-    <main class="dashboard">
-
-        <!-- ─── TOP ROW: PRICE CARDS ─── -->
-        <section class="price-cards-row" id="priceCardsRow">
-            <div class="price-card" data-symbol="BTC" id="card-BTC">
-                <div class="card-top">
-                    <span class="card-symbol">BTC</span>
-                    <span class="regime-badge" id="regime-BTC">—</span>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Millisecond Streaming</h3>
+                    <p>Process thousands of market ticks per second with zero-latency WebSocket delivery directly to your browser.</p>
                 </div>
-                <div class="card-price" id="price-BTC">$0.00</div>
-                <div class="card-change" id="change-BTC">
-                    <span class="change-value">0.00%</span>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Explanations</h3>
+                    <p>Don't just see the flash crash—understand it. RAG-backed LLMs explain market anomalies in plain English.</p>
                 </div>
-                <div class="card-sparkline"><canvas id="spark-BTC" width="120" height="32"></canvas></div>
-                <div class="card-bottom">
-                    <span class="card-vol" id="vol-BTC">Vol: —</span>
-                    <span class="card-rsi" id="rsi-BTC">RSI: —</span>
-                </div>
-            </div>
-            <div class="price-card" data-symbol="ETH" id="card-ETH">
-                <div class="card-top">
-                    <span class="card-symbol">ETH</span>
-                    <span class="regime-badge" id="regime-ETH">—</span>
-                </div>
-                <div class="card-price" id="price-ETH">$0.00</div>
-                <div class="card-change" id="change-ETH">
-                    <span class="change-value">0.00%</span>
-                </div>
-                <div class="card-sparkline"><canvas id="spark-ETH" width="120" height="32"></canvas></div>
-                <div class="card-bottom">
-                    <span class="card-vol" id="vol-ETH">Vol: —</span>
-                    <span class="card-rsi" id="rsi-ETH">RSI: —</span>
-                </div>
-            </div>
-            <div class="price-card" data-symbol="SOL" id="card-SOL">
-                <div class="card-top">
-                    <span class="card-symbol">SOL</span>
-                    <span class="regime-badge" id="regime-SOL">—</span>
-                </div>
-                <div class="card-price" id="price-SOL">$0.00</div>
-                <div class="card-change" id="change-SOL">
-                    <span class="change-value">0.00%</span>
-                </div>
-                <div class="card-sparkline"><canvas id="spark-SOL" width="120" height="32"></canvas></div>
-                <div class="card-bottom">
-                    <span class="card-vol" id="vol-SOL">Vol: —</span>
-                    <span class="card-rsi" id="rsi-SOL">RSI: —</span>
-                </div>
-            </div>
-            <div class="price-card" data-symbol="NIFTY" id="card-NIFTY">
-                <div class="card-top">
-                    <span class="card-symbol">NIFTY</span>
-                    <span class="regime-badge" id="regime-NIFTY">—</span>
-                </div>
-                <div class="card-price" id="price-NIFTY">$0.00</div>
-                <div class="card-change" id="change-NIFTY">
-                    <span class="change-value">0.00%</span>
-                </div>
-                <div class="card-sparkline"><canvas id="spark-NIFTY" width="120" height="32"></canvas></div>
-                <div class="card-bottom">
-                    <span class="card-vol" id="vol-NIFTY">Vol: —</span>
-                    <span class="card-rsi" id="rsi-NIFTY">RSI: —</span>
-                </div>
-            </div>
-            <div class="price-card" data-symbol="SENSEX" id="card-SENSEX">
-                <div class="card-top">
-                    <span class="card-symbol">SENSEX</span>
-                    <span class="regime-badge" id="regime-SENSEX">—</span>
-                </div>
-                <div class="card-price" id="price-SENSEX">$0.00</div>
-                <div class="card-change" id="change-SENSEX">
-                    <span class="change-value">0.00%</span>
-                </div>
-                <div class="card-sparkline"><canvas id="spark-SENSEX" width="120" height="32"></canvas></div>
-                <div class="card-bottom">
-                    <span class="card-vol" id="vol-SENSEX">Vol: —</span>
-                    <span class="card-rsi" id="rsi-SENSEX">RSI: —</span>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Risk Management</h3>
+                    <p>Real-time Value at Risk (VaR), correlation breakdowns, and dynamic risk scoring for your entire portfolio.</p>
                 </div>
             </div>
         </section>
-
-        <!-- ─── MAIN GRID ─── -->
-        <div class="dashboard-grid">
-
-            <!-- ═══ INDICATORS PANEL ═══ -->
-            <section class="panel panel-indicators" id="indicatorsPanel">
-                <div class="panel-header">
-                    <h2>📊 Technical Indicators</h2>
-                    <span class="panel-asset" id="indAsset">BTC</span>
-                </div>
-                <div class="ind-grid" id="indicatorsGrid">
-                    <div class="ind-card">
-                        <div class="ind-label">SMA-20</div>
-                        <div class="ind-value" id="ind-sma_short">—</div>
-                        <div class="ind-arrow" id="arrow-sma_short"></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">SMA-50</div>
-                        <div class="ind-value" id="ind-sma_long">—</div>
-                        <div class="ind-arrow" id="arrow-sma_long"></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">EMA-12</div>
-                        <div class="ind-value" id="ind-ema12">—</div>
-                        <div class="ind-arrow" id="arrow-ema12"></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">EMA-26</div>
-                        <div class="ind-value" id="ind-ema26">—</div>
-                        <div class="ind-arrow" id="arrow-ema26"></div>
-                    </div>
-                    <div class="ind-card ind-highlight">
-                        <div class="ind-label">RSI (14)</div>
-                        <div class="ind-value" id="ind-rsi">—</div>
-                        <div class="ind-bar"><div class="ind-bar-fill" id="rsiBar"></div></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">MACD</div>
-                        <div class="ind-value" id="ind-macd_line">—</div>
-                        <div class="ind-arrow" id="arrow-macd_line"></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">Signal</div>
-                        <div class="ind-value" id="ind-macd_signal">—</div>
-                        <div class="ind-arrow" id="arrow-macd_signal"></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">Histogram</div>
-                        <div class="ind-value" id="ind-macd_histogram">—</div>
-                        <div class="ind-arrow" id="arrow-macd_histogram"></div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">BB Upper</div>
-                        <div class="ind-value" id="ind-bb_upper">—</div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">BB Middle</div>
-                        <div class="ind-value" id="ind-bb_middle">—</div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">BB Lower</div>
-                        <div class="ind-value" id="ind-bb_lower">—</div>
-                    </div>
-                    <div class="ind-card">
-                        <div class="ind-label">Volatility</div>
-                        <div class="ind-value" id="ind-rolling_vol">—</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ═══ ALERTS PANEL ═══ -->
-            <section class="panel panel-alerts" id="alertsPanel">
-                <div class="panel-header">
-                    <h2>🚨 Live Alerts</h2>
-                    <span class="alert-count-badge" id="alertCountBadge">0</span>
-                </div>
-                <div class="alerts-feed" id="alertsFeed">
-                    <div class="alert-empty">Monitoring for anomalies...</div>
-                </div>
-            </section>
-
-            <!-- ═══ PORTFOLIO PANEL ═══ -->
-            <section class="panel panel-portfolio" id="portfolioPanel">
-                <div class="panel-header">
-                    <h2>💼 Portfolio</h2>
-                </div>
-                <div class="portfolio-summary" id="portfolioSummary">
-                    <div class="port-metric">
-                        <span class="port-label">Total Value</span>
-                        <span class="port-value" id="portValue">$0</span>
-                    </div>
-                    <div class="port-metric">
-                        <span class="port-label">Total PnL</span>
-                        <span class="port-value" id="portPnl">$0</span>
-                    </div>
-                    <div class="port-metric">
-                        <span class="port-label">PnL %</span>
-                        <span class="port-value" id="portPnlPct">0%</span>
-                    </div>
-                    <div class="port-metric">
-                        <span class="port-label">VaR (95%)</span>
-                        <span class="port-value" id="portVar">$0</span>
-                    </div>
-                </div>
-                <div class="risk-gauge-container">
-                    <div class="risk-gauge-label">Risk Score</div>
-                    <div class="risk-gauge" id="riskGauge">
-                        <svg viewBox="0 0 200 120" class="gauge-svg">
-                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--surface-3)" stroke-width="12" stroke-linecap="round"/>
-                            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" id="gaugeArc" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
-                            <defs>
-                                <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stop-color="#10b981"/>
-                                    <stop offset="50%" stop-color="#f59e0b"/>
-                                    <stop offset="100%" stop-color="#ef4444"/>
-                                </linearGradient>
-                            </defs>
-                            <text x="100" y="95" text-anchor="middle" class="gauge-text" id="gaugeText">0</text>
-                        </svg>
-                    </div>
-                    <div class="drawdown-row">
-                        <span class="port-label">Max Drawdown</span>
-                        <span class="port-value" id="portDrawdown">0%</span>
-                    </div>
-                </div>
-                <div class="positions-table-wrap">
-                    <table class="positions-table" id="positionsTable">
-                        <thead>
-                            <tr><th>Asset</th><th>Qty</th><th>Price</th><th>PnL</th><th>Risk</th></tr>
-                        </thead>
-                        <tbody id="positionsBody"></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- ═══ CORRELATION PANEL ═══ -->
-            <section class="panel panel-correlation" id="correlationPanel">
-                <div class="panel-header">
-                    <h2>🔗 Correlations</h2>
-                </div>
-                <div class="correlation-cards" id="correlationCards">
-                    <div class="corr-card">
-                        <div class="corr-pair">BTC — ETH</div>
-                        <div class="corr-value" id="corr-BTC-ETH">—</div>
-                        <div class="corr-bar"><div class="corr-bar-fill" id="corrBar-BTC-ETH"></div></div>
-                        <div class="corr-change" id="corrChange-BTC-ETH"></div>
-                    </div>
-                    <div class="corr-card">
-                        <div class="corr-pair">NIFTY — SENSEX</div>
-                        <div class="corr-value" id="corr-NIFTY-SENSEX">—</div>
-                        <div class="corr-bar"><div class="corr-bar-fill" id="corrBar-NIFTY-SENSEX"></div></div>
-                        <div class="corr-change" id="corrChange-NIFTY-SENSEX"></div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ═══ NARRATOR PANEL ═══ -->
-            <section class="panel panel-narrator" id="narratorPanel">
-                <div class="panel-header">
-                    <h2>📝 Market Narrator</h2>
-                    <span class="narrator-time" id="narratorTime">—</span>
-                </div>
-                <div class="narrator-content" id="narratorContent">
-                    <div class="narrator-placeholder">Generating first market summary...</div>
-                </div>
-            </section>
-
-            <!-- ═══ AI CHAT PANEL ═══ -->
-            <section class="panel panel-chat" id="chatPanel">
-                <div class="panel-header">
-                    <h2>🤖 AI Assistant</h2>
-                </div>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="chat-msg bot">
-                        <div class="chat-avatar">AI</div>
-                        <div class="chat-bubble">Hi! I can analyze markets, explain anomalies, and answer questions about your portfolio. Try asking: <em>"Why is BTC falling?"</em></div>
-                    </div>
-                </div>
-                <div class="chat-input-row">
-                    <input type="text" id="chatInput" placeholder="Ask about markets, portfolio, anomalies..." autocomplete="off">
-                    <button class="chat-send-btn" id="chatSendBtn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
-                    </button>
-                </div>
-            </section>
-
-        </div>
     </main>
 
     <footer class="app-footer">
-        <span>Market Intelligence System v2.0</span>
-        <span>Streaming Engine + FastAPI + LLM</span>
+        <div>
+            <span>Market Intelligence System v2.0</span>
+            <span style="margin-left: 12px; color: var(--text-muted);">Built with FastAPI & WebSockets</span>
+        </div>
+        <div style="display: flex; gap: 16px;">
+            <a href="/docs-page" style="color: var(--text-muted); text-decoration: none;">Docs</a>
+            <a href="/terms" style="color: var(--text-muted); text-decoration: none;">Terms of Service</a>
+        </div>
     </footer>
-
-    <script src="/static/js/app.js"></script>
 </body>
 </html>
