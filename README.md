@@ -1,5 +1,5 @@
 # 📈 LiveMarketAI
-microsoft-hack-bharat-production.up.railway.app
+
 **"Decode the market in real-time."**
 
 LiveMarketAI is an AI-powered financial market assistant designed to bring clarity to market volatility. It combines real-time financial data with advanced AI to empower users with actionable, data-driven insights. Built with Python, FastAPI, WebSockets, and a custom cross-platform streaming engine.
