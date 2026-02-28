@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 
 import config
 from rag_module import retrieve, doc_store
+from knowledge_base import get_knowledge_answer
 
 logger = logging.getLogger(__name__)
 
@@ -114,6 +115,17 @@ def _template_answer(question: str, docs: list, market_context: dict = None) -> 
     q_lower = question.lower().strip()
     C = config.CURRENCY_SYMBOL  # ₹
 
+    # ── Knowledge Base Check (educational / project questions) ──
+    kb_answer = get_knowledge_answer(q_lower)
+    if kb_answer:
+        return {
+            "question": question,
+            "answer": kb_answer,
+            "sources": [{"title": d.get("title", ""), "source": d.get("source", "")} for d in docs[:3]] if docs else [],
+            "method": "knowledge_base",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
     answer_parts = []
     indicators = {}
     regimes = {}
@@ -163,7 +175,7 @@ def _template_answer(question: str, docs: list, market_context: dict = None) -> 
         answer_parts.append("\n⚡ Running in fast template mode (no LLM API key configured).")
 
     # ── System / feature questions ──
-    elif any(w in q_lower for w in ["feature", "software", "system", "what is this", "about", "capabilities", "what do you do", "who are you", "are you ai", "are you real"]):
+    elif any(w in q_lower for w in ["feature", "software", "system", "what is this", "about", "capabilities", "what do you do", "who are you", "are you ai", "are you real", "marketintel", "what is market"]):
         answer_parts.append("📊 This is the Live Market Intelligence System. Key features:")
         answer_parts.append("  📈 Real-time streaming prices for BTC, ETH, SOL, NIFTY, SENSEX")
         answer_parts.append("  📉 Technical indicators: SMA, EMA, RSI, MACD, Bollinger Bands")
