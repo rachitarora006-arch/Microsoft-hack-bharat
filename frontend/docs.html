@@ -18,7 +18,7 @@
     </script>
     <style>
         .docs-container {
-            max-width: 1000px;
+            max-width: 1060px;
             margin: 0 auto;
             padding: 40px 24px;
         }
@@ -37,7 +37,7 @@
             font-size: 1.1rem;
         }
         .docs-section {
-            margin-bottom: 60px;
+            margin-bottom: 48px;
             background: var(--surface-1);
             border: 1px solid var(--border);
             border-radius: var(--radius-lg);
@@ -45,31 +45,40 @@
         }
         .docs-section h2 {
             font-size: 1.8rem;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
             color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 12px;
         }
-        .docs-section p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 24px;
-            font-size: 1.05rem;
+        .docs-section h3 {
+            font-size: 1.25rem;
+            margin: 28px 0 12px 0;
+            color: var(--accent);
+            font-weight: 700;
         }
+        .docs-section p, .docs-section li {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1.02rem;
+        }
+        .docs-section p { margin-bottom: 16px; }
+        .docs-section ul {
+            margin: 0 0 16px 18px;
+            list-style: disc;
+        }
+        .docs-section li { margin-bottom: 6px; }
         .mermaid-wrapper {
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             padding: 24px;
-            margin-top: 24px;
+            margin-top: 20px;
             overflow-x: auto;
             display: flex;
             justify-content: center;
         }
-        .mermaid {
-            background: transparent !important;
-        }
+        .mermaid { background: transparent !important; }
         .code-block {
             background: #111827;
             padding: 16px;
@@ -82,6 +91,75 @@
             margin-bottom: 16px;
             white-space: pre;
             line-height: 1.6;
+        }
+        .file-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: border-color 0.2s;
+        }
+        .file-card:hover { border-color: var(--accent); }
+        .file-card .filename {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+        }
+        .file-card .purpose {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .file-card .details {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .file-card .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 6px;
+            margin-top: 8px;
+        }
+        .tag-core { background: #1e40af33; color: #60a5fa; border: 1px solid #1e40af; }
+        .tag-analytics { background: #0f766e33; color: #2dd4bf; border: 1px solid #0f766e; }
+        .tag-ai { background: #6d28d933; color: #c084fc; border: 1px solid #6d28d9; }
+        .tag-infra { background: #b4530933; color: #fbbf24; border: 1px solid #b45309; }
+        .tag-config { background: #475569; color: #e2e8f0; border: 1px solid #64748b; }
+        .pathway-highlight {
+            background: linear-gradient(135deg, #1e40af22, #6d28d922);
+            border: 1px solid #6d28d966;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 16px 0;
+        }
+        .pathway-highlight strong { color: #c084fc; }
+        .toc {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+        .toc a:hover {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: var(--accent)11;
         }
     </style>
 </head>
@@ -108,12 +186,87 @@
     <main class="docs-container">
         <div class="docs-header">
             <h1>System Architecture &amp; Documentation</h1>
-            <p>A deep dive into how the Market Intelligence System ingests data, processes analytics, and generates AI narratives in real-time.</p>
+            <p>A comprehensive deep-dive into how the Market Intelligence System ingests data, processes analytics using the Pathway streaming framework, and generates AI-powered narratives in real-time.</p>
         </div>
 
+        <!-- Table of Contents -->
         <section class="docs-section">
-            <h2>⚙️ System Overview &amp; Data Pipeline</h2>
-            <p>The core of the application is a high-performance Python streaming engine designed to process market ticks and news articles concurrently. The data flows through multiple stateful analytical modules before being broadcasted via WebSockets.</p>
+            <h2>📑 Table of Contents</h2>
+            <div class="toc">
+                <a href="#pathway">🔷 The Pathway Framework</a>
+                <a href="#architecture">⚙️ System Architecture</a>
+                <a href="#pipeline">🔄 Data Pipeline Flow</a>
+                <a href="#rag">🧠 RAG &amp; AI Chat</a>
+                <a href="#files">📂 File-by-File Reference</a>
+                <a href="#indicators">📉 Technical Indicators</a>
+                <a href="#anomaly">🚨 Anomaly Detection</a>
+                <a href="#portfolio">💼 Portfolio &amp; Risk</a>
+            </div>
+        </section>
+
+        <!-- Pathway Framework -->
+        <section class="docs-section" id="pathway">
+            <h2>🔷 What is the Pathway Framework?</h2>
+            <p><strong>Pathway</strong> is an open-source Python framework for real-time data processing and AI pipelines. It allows developers to build streaming applications that process data as it arrives — not in batches. Think of it as a Python-native alternative to Apache Kafka Streams or Apache Flink, but designed specifically for AI/ML workloads.</p>
+
+            <h3>Core Pathway Concepts</h3>
+            <ul>
+                <li><strong>pw.Table</strong> — An ever-updating table of streaming records. As new data arrives, downstream computations automatically re-execute.</li>
+                <li><strong>ConnectorSubject</strong> — A background data producer that feeds records into a pw.Table. You implement <code>run()</code> and call <code>self.next()</code> to emit data.</li>
+                <li><strong>pw.io.csv.read()</strong> — Reads CSV files from a directory in streaming mode, watching for new files and emitting new rows automatically.</li>
+                <li><strong>pw.io.python.read()</strong> — Creates a table from a Python ConnectorSubject, enabling custom data sources.</li>
+                <li><strong>UDFs (User-Defined Functions)</strong> — Stateful or stateless functions decorated with <code>@pw.udf</code> that transform stream records. State is carried between invocations via serialized JSON.</li>
+                <li><strong>JSONL Sinks</strong> — Output connectors that write processed results to JSONL files for persistence or debugging.</li>
+                <li><strong>Subscriptions</strong> — Callbacks registered on tables that fire whenever new records arrive, enabling event-driven architectures.</li>
+            </ul>
+
+            <div class="pathway-highlight">
+                <strong>How MarketIntel uses Pathway:</strong> Our system implements Pathway-compatible abstractions in <code>streaming_engine.py</code>. Every module — from price ingestion to anomaly detection — operates as a streaming processor connected via Pathway-style tables and subscriptions. Data flows continuously through the pipeline, with each module processing records as they arrive.
+            </div>
+
+            <h3>Pathway Architecture Pattern in This Project</h3>
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+flowchart LR
+    classDef pathway fill:#6d28d9,stroke:#c084fc,stroke-width:2px,color:#fff
+    classDef data fill:#1e40af,stroke:#60a5fa,stroke-width:2px,color:#fff
+
+    CS["ConnectorSubject<br/>(MarketSubject)"]:::pathway
+    ST["StreamTable<br/>(market_data)"]:::pathway
+    SUB["subscribe() Callbacks"]:::pathway
+    UDF["@udf Stateful Functions<br/>(Indicators, Regimes)"]:::pathway
+    SINK["JSONL Sink<br/>(Output Files)"]:::data
+    WS["WebSocket Broadcast"]:::data
+
+    CS -->|"self.next()"| ST
+    ST -->|"on_change"| SUB
+    SUB --> UDF
+    UDF --> WS
+    ST --> SINK
+</pre>
+            </div>
+
+            <h3>Why Pathway?</h3>
+            <ul>
+                <li><strong>Real-time by default</strong> — no batch delays; data is processed as it arrives</li>
+                <li><strong>Stateful processing</strong> — indicators like RSI, EMA, and MACD require state across ticks; Pathway UDFs handle this natively</li>
+                <li><strong>Python-native</strong> — no JVM or Scala required; pure Python with familiar APIs</li>
+                <li><strong>Built for AI</strong> — seamless integration with embedding models, vector stores, and LLMs</li>
+                <li><strong>Scalable</strong> — designed to handle high-throughput streams with backpressure management</li>
+            </ul>
+        </section>
+
+        <!-- System Architecture -->
+        <section class="docs-section" id="architecture">
+            <h2>⚙️ System Architecture Overview</h2>
+            <p>The system is organized into four layers, each built on Pathway's streaming primitives:</p>
+
+            <ul>
+                <li><strong>LAYER 1 — Data Ingestion:</strong> Two ConnectorSubjects generate market ticks and news articles, feeding them into StreamTables.</li>
+                <li><strong>LAYER 2 — Analytics Pipeline:</strong> Subscribed UDFs process each tick through indicators, regime detection, anomaly detection, correlation tracking, and portfolio calculations.</li>
+                <li><strong>LAYER 3 — AI Layer:</strong> News articles are embedded via SentenceTransformer (MiniLM) and stored in a FAISS-like vector index. User queries trigger RAG retrieval + LLM generation.</li>
+                <li><strong>LAYER 4 — Presentation:</strong> FastAPI serves REST APIs and a WebSocket endpoint. The frontend dashboard connects via WebSocket for real-time updates.</li>
+            </ul>
 
             <div class="mermaid-wrapper">
 <pre class="mermaid">
@@ -123,99 +276,396 @@ flowchart TD
     classDef ai fill:#6d28d9,stroke:#c084fc,stroke-width:2px,color:#fff
     classDef client fill:#b45309,stroke:#fbbf24,stroke-width:2px,color:#fff
 
-    MarketStream["Live Market Data Generator"]:::source
-    NewsStream["News Directory Watcher"]:::source
-    Engine["Streaming Engine"]
+    MarketStream["Market Data Generator<br/>(ingestion.py)"]:::source
+    NewsStream["News CSV Watcher<br/>(ingestion.py)"]:::source
+    Engine["Streaming Engine<br/>(streaming_engine.py)"]
 
-    MarketStream --> Engine
-    NewsStream --> Engine
+    MarketStream -->|StreamTable| Engine
+    NewsStream -->|StreamTable| Engine
 
-    subgraph AP["Analytics Pipeline"]
-        Ind["Technical Indicators"]:::processing
-        Regime["Market Regime Detection"]:::processing
-        Anom["Anomaly Detection"]:::processing
-        Corr["Correlation Tracker"]:::processing
-        Port["Portfolio Risk Engine"]:::processing
+    subgraph AP["Analytics Pipeline (subscribe callbacks)"]
+        Ind["Technical Indicators<br/>(indicators.py)"]:::processing
+        Regime["Regime Detection<br/>(regime_detection.py)"]:::processing
+        Anom["Anomaly Detection<br/>(anomaly_detection.py)"]:::processing
+        Corr["Correlation Tracker<br/>(correlation_engine.py)"]:::processing
+        Port["Portfolio Risk Engine<br/>(portfolio_engine.py)"]:::processing
     end
 
-    Engine -->|Market Tick| Ind
+    Engine -->|"Market Tick"| Ind
     Ind --> Regime
     Ind --> Anom
-    Engine -->|Price Update| Corr
-    Engine -->|User Positions| Port
+    Engine -->|"Price Update"| Corr
+    Engine -->|"User Positions"| Port
 
-    subgraph RM["RAG Module"]
+    subgraph RM["RAG Module (rag_module.py)"]
         DocStore[("FAISS Vector DB")]:::ai
         Embedder["MiniLM Embedder"]:::ai
     end
 
-    Engine -->|News Row| Embedder
+    Engine -->|"News Row"| Embedder
     Embedder --> DocStore
 
-    Agg["Shared Market State"]
+    Agg["Shared Market State<br/>(main.py)"]
     Ind --> Agg
     Regime --> Agg
     Anom --> Agg
     Corr --> Agg
     Port --> Agg
 
-    WS(("WebSocket Server")):::client
-    Agg -->|Real-time Broadcast| WS
+    WS(("WebSocket Server<br/>(websocket_manager.py)")):::client
+    Agg -->|"Real-time Broadcast"| WS
 
-    Narrator["Market Narrator GPT-4o"]:::ai
-    Agg -->|State Snapshot| Narrator
-    Narrator -->|Narrative| WS
+    Narrator["AI Narrator &amp; Q and A<br/>(ai_explanations.py)"]:::ai
+    Agg -->|"State Snapshot"| Narrator
+    Narrator -->|"Narrative"| WS
 
-    Client["Live Dashboard UI"]:::client
-    WS -->|Full Duplex| Client
-    Client -->|Commands| WS
+    Client["Live Dashboard UI<br/>(frontend/)"]:::client
+    WS -->|"Full Duplex"| Client
+    Client -->|"Commands"| WS
 </pre>
             </div>
         </section>
 
-        <section class="docs-section">
-            <h2>🧠 The Pathway Framework — AI Chat &amp; RAG</h2>
-            <p>The interactive AI Assistant on the dashboard utilizes Retrieval-Augmented Generation (RAG). When a user asks a question, the system queries the local vector database for relevant news context, combines it with the live mathematical state of the market, and prompts the LLM to provide a highly contextual and accurate answer.</p>
+        <!-- Data Pipeline -->
+        <section class="docs-section" id="pipeline">
+            <h2>🔄 Real-Time Data Pipeline</h2>
+            <p>Every 2 seconds, the system processes a complete pipeline cycle. Here's the exact sequence:</p>
+
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+sequenceDiagram
+    participant Gen as MarketSubject
+    participant ST as StreamTable
+    participant IND as indicators.py
+    participant REG as regime_detection.py
+    participant ANO as anomaly_detection.py
+    participant COR as correlation_engine.py
+    participant POR as portfolio_engine.py
+    participant WS as WebSocket Clients
+
+    Gen->>ST: self.next(symbol, price, volume, timestamp)
+    ST->>IND: subscribe callback fires
+    Note over IND: Stateful UDF computes SMA, EMA,<br/>RSI, MACD, Bollinger, Volatility
+    IND->>REG: Pass indicator results
+    Note over REG: Classify regime based on<br/>SMA slopes and volatility
+    IND->>ANO: Pass indicator + price data
+    Note over ANO: Z-score analysis for spikes,<br/>drops, volume surges
+    ST->>COR: Price update callback
+    Note over COR: Update rolling Pearson<br/>correlation matrix
+    ST->>POR: Portfolio recalculation
+    Note over POR: PnL, VaR, drawdown,<br/>risk scoring
+
+    IND-->>WS: Broadcast indicators
+    REG-->>WS: Broadcast regime change
+    ANO-->>WS: Broadcast anomaly alert
+    COR-->>WS: Broadcast correlations
+    POR-->>WS: Broadcast portfolio state
+</pre>
+            </div>
+        </section>
+
+        <!-- RAG & AI -->
+        <section class="docs-section" id="rag">
+            <h2>🧠 RAG-Powered AI Assistant</h2>
+            <p>The AI Assistant uses <strong>Retrieval-Augmented Generation (RAG)</strong> to provide contextual market analysis. When a user asks a question, the system combines relevant news context with live market data before generating an answer.</p>
+
+            <h3>How RAG Works in MarketIntel</h3>
+            <ul>
+                <li><strong>Step 1 — Embed:</strong> News articles from CSVs are chunked and embedded using SentenceTransformer (MiniLM-L6-v2) into 384-dimensional vectors.</li>
+                <li><strong>Step 2 — Store:</strong> Vectors are stored in an in-memory FAISS-like index alongside BM25 keyword indices for hybrid search.</li>
+                <li><strong>Step 3 — Query:</strong> User questions are embedded and compared against stored vectors using cosine similarity. BM25 keyword search runs in parallel.</li>
+                <li><strong>Step 4 — Fuse:</strong> Results from both searches are combined using Reciprocal Rank Fusion (RRF) for better recall.</li>
+                <li><strong>Step 5 — Augment:</strong> Top-K relevant chunks are combined with live market state (prices, indicators, regimes, anomalies).</li>
+                <li><strong>Step 6 — Generate:</strong> The augmented context is sent to GPT-4o-mini, which produces a data-backed, contextual answer.</li>
+            </ul>
 
             <div class="mermaid-wrapper">
 <pre class="mermaid">
 sequenceDiagram
     participant User as Dashboard User
     participant API as FastAPI Server
+    participant KB as Knowledge Base
     participant DB as FAISS Vector DB
     participant State as Live Market State
     participant LLM as OpenAI GPT-4o
 
     User->>API: POST /api/ask
-    API->>DB: Embed Question and Search
-    DB-->>API: Top K Relevant Articles
-    API->>State: get_market_context
-    State-->>API: Prices, Regimes, Portfolio
-    Note over API,LLM: Assemble Unified Prompt
-    API->>LLM: System + News + State + Question
-    LLM-->>API: Context-Aware Answer
-    API-->>User: JSON Response with Sources
+    API->>KB: Check knowledge_base.py
+    alt Educational Question
+        KB-->>API: Return detailed knowledge
+        API-->>User: Knowledge Base Answer
+    else Market Question
+        API->>DB: Embed Question via MiniLM
+        DB-->>API: Top K Relevant Articles
+        API->>State: get_market_context()
+        State-->>API: Prices, Regimes, Portfolio
+        Note over API,LLM: Assemble Unified Prompt
+        API->>LLM: System + News + State + Question
+        LLM-->>API: Context-Aware Analysis
+        API-->>User: JSON Response with Sources
+    end
+</pre>
+            </div>
+
+            <h3>Knowledge Base (Template Fallback)</h3>
+            <p>When the LLM is unavailable, the system uses a comprehensive <strong>knowledge base</strong> (<code>knowledge_base.py</code>) covering:</p>
+            <ul>
+                <li>📊 Project architecture, streaming engine, RAG module details</li>
+                <li>📈 Stock market basics, NIFTY 50, SENSEX, trading types, order types</li>
+                <li>📉 Technical analysis: SMA, EMA, RSI, MACD, Bollinger Bands explained</li>
+                <li>🪙 Crypto fundamentals: Bitcoin, Ethereum, Solana, DeFi, blockchain</li>
+                <li>🇮🇳 Indian crypto regulations, taxation (30% flat tax), digital rupee</li>
+            </ul>
+        </section>
+
+        <!-- File-by-File Reference -->
+        <section class="docs-section" id="files">
+            <h2>📂 File-by-File Reference</h2>
+            <p>Every Python module in the backend, explained in detail. Each file follows the Pathway streaming pattern of producers, tables, and subscribers.</p>
+
+            <div class="file-card">
+                <div class="filename">main.py</div>
+                <div class="purpose">
+                    <strong>The application orchestrator.</strong> Initializes FastAPI, creates all streaming tables, wires up subscriptions between modules, starts the streaming engine, and manages WebSocket connections. It also serves HTML pages and exposes REST API endpoints (<code>/api/ask</code>, <code>/api/market-context</code>).
+                </div>
+                <div class="details">
+                    Key responsibilities: Application startup/shutdown lifecycle, route definitions for all pages (homepage, dashboard, docs, terms), WebSocket endpoint (<code>/ws/market</code>), and the main streaming loop that connects ingestion → processing → broadcast.
+                </div>
+                <span class="tag tag-core">Core</span>
+                <span class="tag tag-infra">Orchestrator</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">config.py</div>
+                <div class="purpose">
+                    <strong>Central configuration hub.</strong> All tunable parameters live here: asset lists, initial prices (INR), API keys (loaded from <code>.env</code> via python-dotenv), indicator windows (SMA-20, SMA-50, RSI-14), anomaly thresholds, volatility profiles, and tick intervals.
+                </div>
+                <div class="details">
+                    Design principle: Every magic number in the codebase is defined here. Changing <code>SMA_SHORT_WINDOW</code> from 20 to 10 instantly changes indicator behavior across the entire system.
+                </div>
+                <span class="tag tag-config">Config</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">streaming_engine.py</div>
+                <div class="purpose">
+                    <strong>The Pathway-compatible streaming framework.</strong> Implements the core streaming abstractions that power the entire system:
+                </div>
+                <div class="details">
+                    <strong>StreamTable</strong> — Analogous to <code>pw.Table</code>. A thread-safe, observable data stream. Producers emit records via <code>.emit()</code>, and consumers register callbacks via <code>.subscribe()</code>. Supports replay for late-joining subscribers and JSONL sinks for persistence.<br/><br/>
+                    <strong>ConnectorSubject</strong> — Analogous to <code>pw.io.python.ConnectorSubject</code>. A base class for background data producers. Subclass it, implement <code>run()</code>, call <code>self.next()</code> to emit records. Runs in a daemon thread.<br/><br/>
+                    <strong>CSVDirectoryWatcher</strong> — Analogous to <code>pw.io.csv.read(mode="streaming")</code>. Watches a directory for CSV files, emits rows as stream records, tracks processed files to avoid duplicates.<br/><br/>
+                    <strong>@udf decorator</strong> — Marks functions as User-Defined Functions for stream processing. Supports stateful processing where state is serialized as JSON between invocations.<br/><br/>
+                    <strong>StreamingEngine</strong> — The top-level orchestrator that manages all tables, starts/stops all connectors, and provides a unified lifecycle.
+                </div>
+                <span class="tag tag-core">Core</span>
+                <span class="tag tag-core">Pathway</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">ingestion.py</div>
+                <div class="purpose">
+                    <strong>Data source layer.</strong> Provides two streaming data sources using Pathway's connector pattern:
+                </div>
+                <div class="details">
+                    <strong>MarketDataGenerator</strong> — Generates realistic random-walk price data for BTC, ETH, SOL, NIFTY, SENSEX. Uses volatility profiles from config, with √(interval) scaling for tick-level volatility. Injects random 2-6% spike/drop events at 1% probability for anomaly detection testing.<br/><br/>
+                    <strong>MarketSubject (ConnectorSubject)</strong> — Wraps MarketDataGenerator as a Pathway-style background producer. Calls <code>self.next(symbol, price, volume, timestamp)</code> every 2 seconds.<br/><br/>
+                    <strong>News Stream</strong> — Uses <code>CSVDirectoryWatcher</code> (Pathway's <code>pw.io.csv.read</code>) to watch <code>data/news/</code> for CSV files. New files are automatically ingested and emitted as stream records.
+                </div>
+                <span class="tag tag-core">Data Source</span>
+                <span class="tag tag-core">Pathway</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">indicators.py</div>
+                <div class="purpose">
+                    <strong>Stateful technical indicator computation.</strong> A single <code>@udf</code>-decorated function (<code>compute_indicators</code>) that maintains rolling windows and computes all indicators incrementally.
+                </div>
+                <div class="details">
+                    Computed per tick: SMA-20, SMA-50, EMA-12, EMA-26, MACD line, MACD signal, MACD histogram, RSI-14, Bollinger Bands (upper/middle/lower), rolling volatility, SMA slope, volume average.<br/><br/>
+                    State is carried between invocations via serialized JSON (Pathway UDF pattern). Each symbol has independent state, enabling parallel processing. Window sizes are bounded to prevent unbounded memory growth.
+                </div>
+                <span class="tag tag-analytics">Analytics</span>
+                <span class="tag tag-core">Pathway UDF</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">regime_detection.py</div>
+                <div class="purpose">
+                    <strong>Market state classifier.</strong> Uses heuristic rules on SMA slopes and volatility to classify each asset into one of four regimes:
+                </div>
+                <div class="details">
+                    📈 <strong>BULLISH</strong> — SMA-20 is above SMA-50 with a positive slope, indicating upward momentum.<br/>
+                    📉 <strong>BEARISH</strong> — SMA-20 is below SMA-50 with a negative slope, indicating downward pressure.<br/>
+                    ↔️ <strong>SIDEWAYS</strong> — SMA slopes are near zero, price is range-bound with no clear direction.<br/>
+                    🌊 <strong>HIGH_VOLATILITY</strong> — Rolling volatility exceeds 2× the configured baseline, indicating extreme price swings.
+                </div>
+                <span class="tag tag-analytics">Analytics</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">anomaly_detection.py</div>
+                <div class="purpose">
+                    <strong>Statistical anomaly detector.</strong> Monitors price and volume streams for three types of anomalies using Z-score analysis:
+                </div>
+                <div class="details">
+                    🔴 <strong>PRICE_SPIKE / PRICE_DROP</strong> — Triggered when price deviates &gt;2.5 standard deviations from the rolling mean. Severity tiers: LOW (2.5σ), MEDIUM (3.5σ), HIGH (5σ), CRITICAL (&gt;7σ).<br/>
+                    📊 <strong>VOLUME_SURGE</strong> — Triggered when volume exceeds 3× the rolling average. Often indicates institutional activity.<br/>
+                    ⚡ <strong>FLASH_CRASH</strong> — Triggered when price drops &gt;5% within 60 seconds. The most severe anomaly type. Each anomaly is broadcast immediately via WebSocket as an alert.
+                </div>
+                <span class="tag tag-analytics">Analytics</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">correlation_engine.py</div>
+                <div class="purpose">
+                    <strong>Cross-asset correlation tracker.</strong> Computes rolling Pearson correlations between all asset pairs (BTC-ETH, BTC-SOL, NIFTY-SENSEX, etc.) using a sliding window of recent prices.
+                </div>
+                <div class="details">
+                    Correlation values range from -1 (perfectly inverse) to +1 (perfectly correlated). This helps identify diversification opportunities and risk concentrations. Updated every tick cycle and displayed on the dashboard.
+                </div>
+                <span class="tag tag-analytics">Analytics</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">portfolio_engine.py</div>
+                <div class="purpose">
+                    <strong>Portfolio risk management engine.</strong> Loads positions from <code>data/portfolio.csv</code> and recalculates risk metrics on every price tick.
+                </div>
+                <div class="details">
+                    Metrics computed: Total portfolio value, PnL (Profit &amp; Loss) in ₹ and %, Value at Risk at 95% confidence (VaR), maximum drawdown percentage, and per-asset risk scores (0-100 composite). VaR uses historical simulation on the rolling return distribution.
+                </div>
+                <span class="tag tag-analytics">Analytics</span>
+                <span class="tag tag-infra">Risk</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">rag_module.py</div>
+                <div class="purpose">
+                    <strong>Retrieval-Augmented Generation engine.</strong> Handles news ingestion, embedding, storage, and hybrid search for the AI Assistant.
+                </div>
+                <div class="details">
+                    Uses SentenceTransformer (MiniLM-L6-v2) to embed text into 384-dimensional vectors. Stores documents in an in-memory vector index with both cosine-similarity search and BM25 keyword search. Results are fused via Reciprocal Rank Fusion (RRF). The <code>retrieve(query)</code> function returns the top-K most relevant news chunks for any question.
+                </div>
+                <span class="tag tag-ai">AI</span>
+                <span class="tag tag-ai">RAG</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">ai_explanations.py</div>
+                <div class="purpose">
+                    <strong>AI narration and Q&amp;A engine.</strong> The brain of the AI Assistant. Handles three modes of operation:
+                </div>
+                <div class="details">
+                    1. <strong>RAG + LLM Mode:</strong> Retrieves relevant news via rag_module, combines with live market state, sends to GPT-4o-mini for a contextual answer.<br/>
+                    2. <strong>Knowledge Base Mode:</strong> Routes educational questions (e.g., "what is Bitcoin?") to the comprehensive knowledge_base.py.<br/>
+                    3. <strong>Template Fallback:</strong> For live-data questions when no LLM is available, builds structured answers using real-time indicator data, regime info, and anomalies.<br/><br/>
+                    Also generates automated market narratives every 5 minutes summarizing top movers, volatility, regimes, and anomalies.
+                </div>
+                <span class="tag tag-ai">AI</span>
+                <span class="tag tag-ai">LLM</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">knowledge_base.py</div>
+                <div class="purpose">
+                    <strong>Comprehensive knowledge repository.</strong> Contains 20+ detailed entries covering project architecture, stock market education, crypto fundamentals, and technical analysis — all accessible to the chatbot without needing an LLM.
+                </div>
+                <div class="details">
+                    Categories: Project overview and architecture, NIFTY 50 and SENSEX details, stock market basics, trading and order types, BTC/ETH/SOL deep-dives, DeFi overview, Indian crypto taxation, and technical indicator explanations (RSI, MACD, SMA, Bollinger Bands, etc.)
+                </div>
+                <span class="tag tag-ai">AI</span>
+                <span class="tag tag-config">Knowledge</span>
+            </div>
+
+            <div class="file-card">
+                <div class="filename">websocket_manager.py</div>
+                <div class="purpose">
+                    <strong>WebSocket connection manager.</strong> Thread-safe manager for all active WebSocket connections. Enables real-time broadcasting from background streaming threads to async FastAPI WebSocket endpoints.
+                </div>
+                <div class="details">
+                    Uses <code>asyncio.run_coroutine_threadsafe</code> to bridge the gap between synchronous streaming threads and the async WebSocket layer. Handles client connect/disconnect gracefully, with automatic cleanup of dead connections. Packages all messages with event type and UTC timestamp.
+                </div>
+                <span class="tag tag-infra">Infrastructure</span>
+            </div>
+        </section>
+
+
+        <!-- Technical Indicators -->
+        <section class="docs-section" id="indicators">
+            <h2>📉 Technical Indicators Deep Dive</h2>
+            <p>All indicators are computed incrementally via a Pathway-style <code>@udf</code> function. State is carried between ticks via serialized JSON.</p>
+
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+flowchart LR
+    classDef calc fill:#0f766e,stroke:#2dd4bf,stroke-width:2px,color:#fff
+
+    TICK["Price Tick"] --> SMA["SMA-20, SMA-50"]:::calc
+    TICK --> EMA["EMA-12, EMA-26"]:::calc
+    EMA --> MACD["MACD Line<br/>= EMA12 - EMA26"]:::calc
+    MACD --> SIG["Signal Line<br/>= EMA-9 of MACD"]:::calc
+    MACD --> HIST["Histogram<br/>= MACD - Signal"]:::calc
+    TICK --> RSI["RSI-14<br/>Avg Gain / Avg Loss"]:::calc
+    SMA --> BB["Bollinger Bands<br/>SMA ± 2σ"]:::calc
+    TICK --> VOL["Rolling Volatility<br/>σ of returns"]:::calc
 </pre>
             </div>
         </section>
 
-        <section class="docs-section">
-            <h2>📂 Project File Architecture</h2>
-            <p>The modular Python backend ensures separation of concerns. Each module is a pure-function processor invoked by the streaming engine.</p>
-            <div class="code-block">
-├── main.py                 # Application orchestrator, WS handling, and FastAPI routes
-├── config.py               # Central configuration (API keys, tuning params, thresholds)
-├── streaming_engine.py     # Custom concurrency engine handling streams and callbacks
-├── ingestion.py            # Generates simulated ticks and reads news from CSV
-├── indicators.py           # Computes SMA, EMA, MACD, RSI, Bollinger Bands
-├── regime_detection.py     # Heuristic-based market state classification
-├── anomaly_detection.py    # Detects price spikes, volume surges, and flash crashes
-├── portfolio_engine.py     # Calculates PnL, Value at Risk (VaR), and Risk Scores
-├── correlation_engine.py   # Computes Pearson correlations between asset pairs
-├── rag_module.py           # Embeds news articles and runs local FAISS vector search
-├── ai_explanations.py      # Formats prompts and communicates with OpenAI APIs
-└── frontend/               # Standard web technologies (HTML, CSS, Vanilla JS)
+        <!-- Anomaly Detection -->
+        <section class="docs-section" id="anomaly">
+            <h2>🚨 Anomaly Detection Logic</h2>
+            <p>The system uses statistical Z-score analysis to detect anomalies in real-time. Each tick is compared against its rolling statistical profile.</p>
+
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+flowchart TD
+    classDef normal fill:#0f766e,stroke:#2dd4bf,stroke-width:2px,color:#fff
+    classDef alert fill:#dc2626,stroke:#f87171,stroke-width:2px,color:#fff
+
+    TICK["New Price Tick"] --> ZSCORE["Compute Z-Score<br/>= (Price - Mean) / StdDev"]:::normal
+    TICK --> VOLCHECK["Check Volume<br/>vs 3x Average"]:::normal
+    TICK --> FLASH["Check 60s Change<br/>vs -5% Threshold"]:::normal
+
+    ZSCORE -->|"Z &gt; 2.5"| SPIKE["PRICE_SPIKE Alert"]:::alert
+    ZSCORE -->|"Z &lt; -2.5"| DROP["PRICE_DROP Alert"]:::alert
+    VOLCHECK -->|"Vol &gt; 3x"| SURGE["VOLUME_SURGE Alert"]:::alert
+    FLASH -->|"Drop &gt; 5%"| CRASH["FLASH_CRASH Alert"]:::alert
+
+    SPIKE --> SEV["Severity Tiers:<br/>LOW / MEDIUM / HIGH / CRITICAL"]
+    DROP --> SEV
+</pre>
             </div>
+        </section>
+
+        <!-- Portfolio & Risk -->
+        <section class="docs-section" id="portfolio">
+            <h2>💼 Portfolio &amp; Risk Management</h2>
+            <p>Portfolio positions are loaded from <code>data/portfolio.csv</code> and recalculated on every price update. The risk engine computes industry-standard metrics.</p>
+
+            <div class="mermaid-wrapper">
+<pre class="mermaid">
+flowchart LR
+    classDef metric fill:#b45309,stroke:#fbbf24,stroke-width:2px,color:#fff
+
+    CSV["portfolio.csv<br/>(symbol, qty, avg_cost)"] --> ENGINE["Portfolio Engine"]
+    PRICE["Live Price Feed"] --> ENGINE
+
+    ENGINE --> VALUE["Total Value<br/>Σ(qty × price)"]:::metric
+    ENGINE --> PNL["PnL<br/>Value - Cost"]:::metric
+    ENGINE --> VAR["VaR 95%<br/>Max 1-day Loss"]:::metric
+    ENGINE --> DD["Max Drawdown<br/>Peak-to-Trough"]:::metric
+    ENGINE --> RISK["Risk Score<br/>0-100 Composite"]:::metric
+</pre>
+            </div>
+
+            <h3>Risk Score Interpretation</h3>
+            <ul>
+                <li><strong>0–30:</strong> ✅ Low risk — Conservative portfolio with minimal volatility exposure</li>
+                <li><strong>30–60:</strong> ⚠️ Moderate risk — Balanced exposure, monitor closely during volatile periods</li>
+                <li><strong>60–100:</strong> 🔴 High risk — Significant exposure to volatile assets, consider rebalancing</li>
+            </ul>
         </section>
 
     </main>
@@ -223,7 +673,7 @@ sequenceDiagram
     <footer class="app-footer">
         <div>
             <span>Market Intelligence System v2.0</span>
-            <span style="margin-left: 12px; color: var(--text-muted);">Built with FastAPI &amp; WebSockets</span>
+            <span style="margin-left: 12px; color: var(--text-muted);">Built with Pathway Framework, FastAPI &amp; WebSockets</span>
         </div>
         <div style="display: flex; gap: 16px;">
             <a href="/docs-page" style="color: var(--text-muted); text-decoration: none;">Docs</a>
