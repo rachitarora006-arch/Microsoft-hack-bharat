@@ -13,7 +13,25 @@
         mermaid.initialize({
             startOnLoad: true,
             theme: 'dark',
-            fontFamily: 'Inter, sans-serif'
+            fontFamily: 'Inter, sans-serif',
+            fontSize: 18,
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                padding: 20,
+                nodeSpacing: 60,
+                rankSpacing: 80
+            },
+            sequence: {
+                useMaxWidth: false,
+                width: 220,
+                height: 50,
+                boxMargin: 12,
+                mirrorActors: false,
+                actorFontSize: 16,
+                noteFontSize: 14,
+                messageFontSize: 15
+            }
         });
     </script>
     <style>
@@ -72,13 +90,25 @@
             background: var(--bg-secondary);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 24px;
+            padding: 32px 40px;
             margin-top: 20px;
             overflow-x: auto;
             display: flex;
             justify-content: center;
+            min-height: 300px;
+            align-items: center;
         }
-        .mermaid { background: transparent !important; }
+        .mermaid {
+            background: transparent !important;
+            min-width: 700px;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .mermaid svg {
+            min-height: 280px;
+            width: 100% !important;
+            max-width: none !important;
+        }
         .code-block {
             background: #111827;
             padding: 16px;
